@@ -12,12 +12,12 @@ const defaultProps = {
   minUnit: 'day',
   timeSteps: {},
   width: 400,
-  headerLabelFormats: {},
-  subHeaderLabelFormats: {},
+  topHeaderLabelFormats: {},
+  bottomHeaderLabelFormats: {},
   stickyOffset: 5,
   stickyHeader: true,
-  headerLabelGroupHeight: 15,
-  headerLabelHeight: 15,
+  topHeaderLabelHeight: 15,
+  bottomHeaderLabelHeight: 15,
   registerScroll: () => {},
   headerRef: () => {}
 }

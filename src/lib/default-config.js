@@ -19,7 +19,7 @@ export const defaultTimeSteps = {
   year: 1
 }
 
-export const defaultHeaderLabelFormats = {
+export const defaultTopHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',
   monthShort: 'MM/YY',
@@ -35,7 +35,7 @@ export const defaultHeaderLabelFormats = {
   time: 'LLL'
 }
 
-export const defaultSubHeaderLabelFormats = {
+export const defaultBottomHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',
   monthShort: 'MM',

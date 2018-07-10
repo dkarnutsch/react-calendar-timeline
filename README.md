@@ -190,11 +190,11 @@ Ref callback that gets a DOM reference to the header element. See [FAQ below](#t
 
 Height of one line in the calendar in pixels. Default `30`
 
-### headerLabelGroupHeight
+### topHeaderLabelHeight
 
 Height of the top header line. Default `30`
 
-### headerLabelHeight
+### bottomHeaderLabelHeight
 
 Height of the bottom header line. Default `30`
 

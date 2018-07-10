@@ -14,10 +14,10 @@ export default class TimelineElementsHeader extends Component {
     minUnit: PropTypes.string.isRequired,
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
-    headerLabelFormats: PropTypes.object.isRequired,
-    subHeaderLabelFormats: PropTypes.object.isRequired,
-    headerLabelGroupHeight: PropTypes.number.isRequired,
-    headerLabelHeight: PropTypes.number.isRequired,
+    topHeaderLabelFormats: PropTypes.object.isRequired,
+    bottomHeaderLabelFormats: PropTypes.object.isRequired,
+    topHeaderLabelHeight: PropTypes.number.isRequired,
+    bottomHeaderLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired
   }
 
@@ -41,8 +41,8 @@ export default class TimelineElementsHeader extends Component {
     evt.stopPropagation()
   }
 
-  headerLabel(time, unit, width) {
-    const { headerLabelFormats: f } = this.props
+  topHeaderLabel(time, unit, width) {
+    const { topHeaderLabelFormats: f } = this.props
 
     if (unit === 'year') {
       return time.format(width < 46 ? f.yearShort : f.yearLong)
@@ -69,8 +69,8 @@ export default class TimelineElementsHeader extends Component {
     }
   }
 
-  subHeaderLabel(time, unit, width) {
-    const { subHeaderLabelFormats: f } = this.props
+  bottomHeaderLabel(time, unit, width) {
+    const { bottomHeaderLabelFormats: f } = this.props
 
     if (unit === 'year') {
       return time.format(width < 46 ? f.yearShort : f.yearLong)
@@ -116,8 +116,8 @@ export default class TimelineElementsHeader extends Component {
       canvasWidth,
       minUnit,
       timeSteps,
-      headerLabelGroupHeight,
-      headerLabelHeight,
+      topHeaderLabelHeight,
+      bottomHeaderLabelHeight,
       hasRightSidebar
     } = this.props
 
@@ -157,13 +157,13 @@ export default class TimelineElementsHeader extends Component {
               style={{
                 left: `${left - 1}px`,
                 width: `${labelWidth}px`,
-                height: `${headerLabelGroupHeight}px`,
-                lineHeight: `${headerLabelGroupHeight}px`,
+                height: `${topHeaderLabelHeight}px`,
+                lineHeight: `${topHeaderLabelHeight}px`,
                 cursor: 'pointer'
               }}
             >
               <span style={{ width: contentWidth, display: 'block' }}>
-                {this.headerLabel(time, nextUnit, labelWidth)}
+                {this.topHeaderLabel(time, nextUnit, labelWidth)}
               </span>
             </div>
           )
@@ -198,13 +198,13 @@ export default class TimelineElementsHeader extends Component {
               width: `${labelWidth}px`,
               height: `${
                 minUnit === 'year'
-                  ? headerLabelGroupHeight + headerLabelHeight
-                  : headerLabelHeight
+                  ? topHeaderLabelHeight + bottomHeaderLabelHeight
+                  : bottomHeaderLabelHeight
               }px`,
               lineHeight: `${
                 minUnit === 'year'
-                  ? headerLabelGroupHeight + headerLabelHeight
-                  : headerLabelHeight
+                  ? topHeaderLabelHeight + bottomHeaderLabelHeight
+                  : bottomHeaderLabelHeight
               }px`,
               fontSize: `${
                 labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
@@ -212,14 +212,14 @@ export default class TimelineElementsHeader extends Component {
               cursor: 'pointer'
             }}
           >
-            {this.subHeaderLabel(time, minUnit, labelWidth)}
+            {this.bottomHeaderLabel(time, minUnit, labelWidth)}
           </div>
         )
       }
     )
 
     let headerStyle = {
-      height: `${headerLabelGroupHeight + headerLabelHeight}px`
+      height: `${topHeaderLabelHeight + bottomHeaderLabelHeight}px`
     }
 
     return (
@@ -235,13 +235,13 @@ export default class TimelineElementsHeader extends Component {
       >
         <div
           className="top-header"
-          style={{ height: headerLabelGroupHeight, width: canvasWidth }}
+          style={{ height: topHeaderLabelHeight, width: canvasWidth }}
         >
           {topHeaderLabels}
         </div>
         <div
           className="bottom-header"
-          style={{ height: headerLabelHeight, width: canvasWidth }}
+          style={{ height: bottomHeaderLabelHeight, width: canvasWidth }}
         >
           {bottomHeaderLabels}
         </div>

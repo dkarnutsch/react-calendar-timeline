@@ -12,10 +12,10 @@ const defaultProps = {
   minUnit: 'day',
   timeSteps: {},
   width: 0,
-  headerLabelFormats: {},
-  subHeaderLabelFormats: {},
-  headerLabelGroupHeight: 0,
-  headerLabelHeight: 0,
+  topHeaderLabelFormats: {},
+  bottomHeaderLabelFormats: {},
+  topHeaderLabelHeight: 0,
+  bottomHeaderLabelHeight: 0,
   registerScroll: () => {}
 }
 
