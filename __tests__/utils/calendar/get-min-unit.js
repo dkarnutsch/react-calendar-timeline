@@ -38,9 +38,15 @@ describe('getMinUnit', () => {
 
       expect(result).toBe('day')
     })
-    it('should be month for one year duration', () => {
+    it('should be week for one year duration', () => {
       const oneYear = moment.duration(1, 'year').asMilliseconds()
       const result = getMinUnit(oneYear, standardWidth, defaultTimeSteps)
+
+      expect(result).toBe('week')
+    })
+    it('should be month for two year duration', () => {
+      const twoYears = moment.duration(2, 'year').asMilliseconds()
+      const result = getMinUnit(twoYears, standardWidth, defaultTimeSteps)
 
       expect(result).toBe('month')
     })

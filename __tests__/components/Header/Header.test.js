@@ -13,10 +13,12 @@ const defaultProps = {
   timeSteps: {},
   width: 400,
   topHeaderLabelFormats: {},
+  middleHeaderLabelFormats: {},
   bottomHeaderLabelFormats: {},
   stickyOffset: 5,
   stickyHeader: true,
   topHeaderLabelHeight: 15,
+  middleHeaderLabelHeight: 15,
   bottomHeaderLabelHeight: 15,
   registerScroll: () => {},
   headerRef: () => {}

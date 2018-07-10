@@ -13,8 +13,10 @@ const defaultProps = {
   timeSteps: {},
   width: 0,
   topHeaderLabelFormats: {},
+  middleHeaderLabelFormats: {},
   bottomHeaderLabelFormats: {},
   topHeaderLabelHeight: 0,
+  middleHeaderLabelHeight: 0,
   bottomHeaderLabelHeight: 0,
   registerScroll: () => {}
 }
