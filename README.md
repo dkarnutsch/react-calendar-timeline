@@ -190,9 +190,17 @@ Ref callback that gets a DOM reference to the header element. See [FAQ below](#t
 
 Height of one line in the calendar in pixels. Default `30`
 
+### useThreeRowHeader
+
+Set to true, if a three row header is used. Default `false`
+
 ### topHeaderLabelHeight
 
-Height of the top header line. Default `30`
+Height of the top header line. (Will be ignored if `useThreeRowHeader` is `false`. Default `30`
+
+### middleHeaderLabelHeight
+
+Height of the middle header line. Default `30`
 
 ### bottomHeaderLabelHeight
 

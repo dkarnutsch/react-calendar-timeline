@@ -20,6 +20,7 @@ class Header extends Component {
     topHeaderLabelHeight: PropTypes.number.isRequired,
     middleHeaderLabelHeight: PropTypes.number.isRequired,
     bottomHeaderLabelHeight: PropTypes.number.isRequired,
+    useThreeRowHeader: PropTypes.bool.isRequired,
     registerScroll: PropTypes.func.isRequired,
     leftSidebarHeader: PropTypes.node,
     rightSidebarHeader: PropTypes.node,

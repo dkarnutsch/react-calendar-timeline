@@ -20,6 +20,7 @@ export default class TimelineElementsHeader extends Component {
     topHeaderLabelHeight: PropTypes.number.isRequired,
     middleHeaderLabelHeight: PropTypes.number.isRequired,
     bottomHeaderLabelHeight: PropTypes.number.isRequired,
+    useThreeRowHeader: PropTypes.bool.isRequired,
     registerScroll: PropTypes.func.isRequired
   }
 
@@ -145,12 +146,13 @@ export default class TimelineElementsHeader extends Component {
       topHeaderLabelHeight,
       middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
+      useThreeRowHeader,
       hasRightSidebar
     } = this.props
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
-    const threeHeaders = minUnit !== 'month' && twoHeaders
+    const threeHeaders = useThreeRowHeader && minUnit !== 'month' && twoHeaders
 
     const topHeaderLabels = []
     // add the top header
@@ -271,16 +273,14 @@ export default class TimelineElementsHeader extends Component {
               left: `${left - leftCorrect}px`,
               width: `${labelWidth}px`,
               height: `${
-                minUnit === 'year'
-                  ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
-                  : minUnit === 'month' ? middleHeaderLabelHeight + bottomHeaderLabelHeight
-                  : bottomHeaderLabelHeight
+                threeHeaders ? bottomHeaderLabelHeight
+                  : twoHeaders ? (useThreeRowHeader ? bottomHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight)
+                  :(useThreeRowHeader ? bottomHeaderLabelHeight + middleHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight + middleHeaderLabelHeight)
               }px`,
               lineHeight: `${
-                minUnit === 'year'
-                  ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
-                  : minUnit === 'month' ? middleHeaderLabelHeight + bottomHeaderLabelHeight
-                  : bottomHeaderLabelHeight
+                threeHeaders ? bottomHeaderLabelHeight
+                  : twoHeaders ? (useThreeRowHeader ? bottomHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight)
+                  :(useThreeRowHeader ? bottomHeaderLabelHeight + middleHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight + middleHeaderLabelHeight)
               }px`,
               fontSize: `${
                 labelWidth > 30 ? '14' : labelWidth > 20 ? '12' : '10'
@@ -295,7 +295,7 @@ export default class TimelineElementsHeader extends Component {
     )
 
     let headerStyle = {
-      height: `${topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight}px`
+      height: `${useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight}px`
     }
 
     return (
@@ -325,8 +325,8 @@ export default class TimelineElementsHeader extends Component {
           style={{
             height: threeHeaders
               ? bottomHeaderLabelHeight : twoHeaders
-              ? bottomHeaderLabelHeight + topHeaderLabelHeight
-              : bottomHeaderLabelHeight + middleHeaderLabelHeight + topHeaderLabelHeight,
+              ? (useThreeRowHeader ? bottomHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight)
+              : (useThreeRowHeader ? bottomHeaderLabelHeight + middleHeaderLabelHeight + topHeaderLabelHeight : bottomHeaderLabelHeight + middleHeaderLabelHeight),
             width: canvasWidth
           }}
         >

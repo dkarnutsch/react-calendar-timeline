@@ -49,6 +49,7 @@ export default class ReactCalendarTimeline extends Component {
     topHeaderLabelHeight: PropTypes.number,
     middleHeaderLabelHeight: PropTypes.number,
     bottomHeaderLabelHeight: PropTypes.number,
+    useThreeRowHeader: PropTypes.bool,
     itemHeightRatio: PropTypes.number,
     minimumWidthForItemContentVisibility: PropTypes.number,
 
@@ -191,6 +192,7 @@ export default class ReactCalendarTimeline extends Component {
     topHeaderLabelHeight: 30,
     middleHeaderLabelHeight: 30,
     bottomHeaderLabelHeight: 30,
+    useThreeRowHeader: false,
     itemHeightRatio: 0.65,
     minimumWidthForItemContentVisibility: 25,
 
@@ -373,8 +375,8 @@ export default class ReactCalendarTimeline extends Component {
     } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-    const { topHeaderLabelHeight, middleHeaderLabelHeight, bottomHeaderLabelHeight } = props
-    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
+    const { topHeaderLabelHeight, middleHeaderLabelHeight, bottomHeaderLabelHeight, useThreeRowHeader } = props
+    const headerHeight = useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -981,6 +983,7 @@ export default class ReactCalendarTimeline extends Component {
         topHeaderLabelFormats={this.props.topHeaderLabelFormats}
         middleHeaderLabelFormats={this.props.middleHeaderLabelFormats}
         bottomHeaderLabelFormats={this.props.bottomHeaderLabelFormats}
+        useThreeRowHeader={this.props.useThreeRowHeader}
         registerScroll={this.registerScrollListener}
         leftSidebarHeader={leftSidebar}
         rightSidebarHeader={rightSidebar}
@@ -1056,6 +1059,7 @@ export default class ReactCalendarTimeline extends Component {
       topHeaderLabelHeight,
       middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
+      useThreeRowHeader,
       stackItems,
       itemHeightRatio
     } = this.props
@@ -1070,7 +1074,7 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
-    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
+    const headerHeight = useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const visibleItems = getVisibleItems(
       items,
@@ -1227,6 +1231,7 @@ export default class ReactCalendarTimeline extends Component {
       topHeaderLabelHeight,
       middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
+      useThreeRowHeader,
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
@@ -1249,7 +1254,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
     const minUnit = getMinUnit(zoom, width, timeSteps)
-    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
+    const headerHeight =  useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem
 
