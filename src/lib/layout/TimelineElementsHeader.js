@@ -15,8 +15,10 @@ export default class TimelineElementsHeader extends Component {
     timeSteps: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
     topHeaderLabelFormats: PropTypes.object.isRequired,
+    middleHeaderLabelFormats: PropTypes.object.isRequired,
     bottomHeaderLabelFormats: PropTypes.object.isRequired,
     topHeaderLabelHeight: PropTypes.number.isRequired,
+    middleHeaderLabelHeight: PropTypes.number.isRequired,
     bottomHeaderLabelHeight: PropTypes.number.isRequired,
     registerScroll: PropTypes.func.isRequired
   }
@@ -54,6 +56,8 @@ export default class TimelineElementsHeader extends Component {
             ? f.monthMedium
             : width < 120 ? f.monthMediumLong : f.monthLong
       )
+    } else if (unit === 'week') {
+      return time.format(width < 46 ? f.weekMedium : f.weekLong)
     } else if (unit === 'day') {
       return time.format(width < 150 ? f.dayShort : f.dayLong)
     } else if (unit === 'hour') {
@@ -69,6 +73,26 @@ export default class TimelineElementsHeader extends Component {
     }
   }
 
+  middleHeaderLabel(time, unit, width) {
+    const { middleHeaderLabelFormats: f } = this.props
+
+    if (unit === 'year') {
+      return time.format(width < 46 ? f.yearShort : f.yearLong)
+    } else if (unit === 'month') {
+      return time.format(
+        width < 37 ? f.monthShort : width < 85 ? f.monthMedium : f.monthLong
+      )
+    } else if (unit === 'week') {
+      return time.format(f.weekMedium)
+    } else if (unit === 'day') {
+      return time.format(width < 47 ? f.dayShort : f.dayLong)
+    } else if (unit === 'hour') {
+      return time.format(f.hourLong);
+    } else {
+      return time.format(f.time)
+    }
+  }
+
   bottomHeaderLabel(time, unit, width) {
     const { bottomHeaderLabelFormats: f } = this.props
 
@@ -78,6 +102,8 @@ export default class TimelineElementsHeader extends Component {
       return time.format(
         width < 37 ? f.monthShort : width < 85 ? f.monthMedium : f.monthLong
       )
+    } else if (unit === 'week') {
+      return time.format(width < 46 ? f.weekShort : f.weekMedium)
     } else if (unit === 'day') {
       return time.format(
         width < 47
@@ -117,17 +143,19 @@ export default class TimelineElementsHeader extends Component {
       minUnit,
       timeSteps,
       topHeaderLabelHeight,
+      middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
       hasRightSidebar
     } = this.props
 
     const ratio = canvasWidth / (canvasTimeEnd - canvasTimeStart)
     const twoHeaders = minUnit !== 'year'
+    const threeHeaders = minUnit !== 'month' && twoHeaders
 
     const topHeaderLabels = []
     // add the top header
-    if (twoHeaders) {
-      const nextUnit = getNextUnit(minUnit)
+    if (threeHeaders) {
+      const nextUnit = getNextUnit(getNextUnit(minUnit))
 
       iterateTimes(
         canvasTimeStart,
@@ -150,7 +178,7 @@ export default class TimelineElementsHeader extends Component {
           topHeaderLabels.push(
             <div
               key={`top-label-${time.valueOf()}`}
-              className={`rct-label-group${
+              className={`rct-label-top${
                 hasRightSidebar ? ' rct-has-right-sidebar' : ''
               }`}
               onClick={() => this.handlePeriodClick(time, nextUnit)}
@@ -164,6 +192,52 @@ export default class TimelineElementsHeader extends Component {
             >
               <span style={{ width: contentWidth, display: 'block' }}>
                 {this.topHeaderLabel(time, nextUnit, labelWidth)}
+              </span>
+            </div>
+          )
+        }
+      )
+    }
+
+    const middleHeaderLabels = []
+    if (twoHeaders) {
+      const nextUnit = getNextUnit(minUnit)
+
+      iterateTimes(
+        canvasTimeStart,
+        canvasTimeEnd,
+        nextUnit,
+        timeSteps,
+        (time, nextTime) => {
+          const left = Math.round((time.valueOf() - canvasTimeStart) * ratio)
+          const right = Math.round(
+            (nextTime.valueOf() - canvasTimeStart) * ratio
+          )
+
+          const labelWidth = right - left
+          // this width applies to the content in the header
+          // it simulates stickyness where the content is fixed in the center
+          // of the label.  when the labelWidth is less than visible time range,
+          // have label content fill the entire width
+          const contentWidth = Math.min(labelWidth, canvasWidth / 3)
+
+          middleHeaderLabels.push(
+            <div
+              key={`middle-label-${time.valueOf()}`}
+              className={`rct-label-middle${
+                hasRightSidebar ? ' rct-has-right-sidebar' : ''
+              }`}
+              onClick={() => this.handlePeriodClick(time, nextUnit)}
+              style={{
+                left: `${left - 1}px`,
+                width: `${labelWidth}px`,
+                height: `${middleHeaderLabelHeight}px`,
+                lineHeight: `${middleHeaderLabelHeight}px`,
+                cursor: 'pointer'
+              }}
+            >
+              <span style={{width: contentWidth, display: 'block'}}>
+                {this.middleHeaderLabel(time, nextUnit, labelWidth)}
               </span>
             </div>
           )
@@ -189,7 +263,7 @@ export default class TimelineElementsHeader extends Component {
         bottomHeaderLabels.push(
           <div
             key={`label-${time.valueOf()}`}
-            className={`rct-label ${twoHeaders ? '' : 'rct-label-only'} ${
+            className={`rct-label-bottom ${twoHeaders ? '' : 'rct-label-only'} ${
               firstOfType ? 'rct-first-of-type' : ''
             } ${minUnit !== 'month' ? `rct-day-${time.day()}` : ''} `}
             onClick={() => this.handlePeriodClick(time, minUnit)}
@@ -198,12 +272,14 @@ export default class TimelineElementsHeader extends Component {
               width: `${labelWidth}px`,
               height: `${
                 minUnit === 'year'
-                  ? topHeaderLabelHeight + bottomHeaderLabelHeight
+                  ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
+                  : minUnit === 'month' ? middleHeaderLabelHeight + bottomHeaderLabelHeight
                   : bottomHeaderLabelHeight
               }px`,
               lineHeight: `${
                 minUnit === 'year'
-                  ? topHeaderLabelHeight + bottomHeaderLabelHeight
+                  ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
+                  : minUnit === 'month' ? middleHeaderLabelHeight + bottomHeaderLabelHeight
                   : bottomHeaderLabelHeight
               }px`,
               fontSize: `${
@@ -219,7 +295,7 @@ export default class TimelineElementsHeader extends Component {
     )
 
     let headerStyle = {
-      height: `${topHeaderLabelHeight + bottomHeaderLabelHeight}px`
+      height: `${topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight}px`
     }
 
     return (
@@ -235,13 +311,24 @@ export default class TimelineElementsHeader extends Component {
       >
         <div
           className="top-header"
-          style={{ height: topHeaderLabelHeight, width: canvasWidth }}
+          style={{ height: threeHeaders ? topHeaderLabelHeight : 0, width: canvasWidth }}
         >
           {topHeaderLabels}
         </div>
         <div
+          className="middle-header"
+          style={{ height: twoHeaders ? middleHeaderLabelHeight : 0, width: canvasWidth}}>
+          {middleHeaderLabels}
+        </div>
+        <div
           className="bottom-header"
-          style={{ height: bottomHeaderLabelHeight, width: canvasWidth }}
+          style={{
+            height: threeHeaders
+              ? bottomHeaderLabelHeight : twoHeaders
+              ? bottomHeaderLabelHeight + topHeaderLabelHeight
+              : bottomHeaderLabelHeight + middleHeaderLabelHeight + topHeaderLabelHeight,
+            width: canvasWidth
+          }}
         >
           {bottomHeaderLabels}
         </div>

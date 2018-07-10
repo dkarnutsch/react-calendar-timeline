@@ -29,6 +29,7 @@ import {
   defaultKeys,
   defaultTimeSteps,
   defaultTopHeaderLabelFormats,
+  defaultMiddleHeaderLabelFormats,
   defaultBottomHeaderLabelFormats
 } from './default-config'
 
@@ -46,6 +47,7 @@ export default class ReactCalendarTimeline extends Component {
     stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
     topHeaderLabelHeight: PropTypes.number,
+    middleHeaderLabelHeight: PropTypes.number,
     bottomHeaderLabelHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
     minimumWidthForItemContentVisibility: PropTypes.number,
@@ -108,6 +110,7 @@ export default class ReactCalendarTimeline extends Component {
       minute: PropTypes.number,
       hour: PropTypes.number,
       day: PropTypes.number,
+      week: PropTypes.number,
       month: PropTypes.number,
       year: PropTypes.number
     }),
@@ -129,6 +132,8 @@ export default class ReactCalendarTimeline extends Component {
       monthMedium: PropTypes.string,
       monthMediumLong: PropTypes.string,
       monthLong: PropTypes.string,
+      weekMedium: PropTypes.string,
+      weekLong: PropTypes.string,
       dayShort: PropTypes.string,
       dayLong: PropTypes.string,
       hourShort: PropTypes.string,
@@ -137,12 +142,26 @@ export default class ReactCalendarTimeline extends Component {
       hourLong: PropTypes.string
     }),
 
+    middleHeaderLabelFormats: PropTypes.shape({
+      yearShort: PropTypes.string,
+      yearLong: PropTypes.string,
+      monthShort: PropTypes.string,
+      monthLong: PropTypes.string,
+      weekMedium: PropTypes.string,
+      dayLong: PropTypes.string,
+      dayShort: PropTypes.string,
+      hourLong: PropTypes.string,
+      hourShort: PropTypes.string
+    }),
+
     bottomHeaderLabelFormats: PropTypes.shape({
       yearShort: PropTypes.string,
       yearLong: PropTypes.string,
       monthShort: PropTypes.string,
       monthMedium: PropTypes.string,
       monthLong: PropTypes.string,
+      weekShort: PropTypes.string,
+      weekMedium: PropTypes.string,
       dayShort: PropTypes.string,
       dayMedium: PropTypes.string,
       dayMediumLong: PropTypes.string,
@@ -170,6 +189,7 @@ export default class ReactCalendarTimeline extends Component {
     stickyHeader: true,
     lineHeight: 30,
     topHeaderLabelHeight: 30,
+    middleHeaderLabelHeight: 30,
     bottomHeaderLabelHeight: 30,
     itemHeightRatio: 0.65,
     minimumWidthForItemContentVisibility: 25,
@@ -233,6 +253,7 @@ export default class ReactCalendarTimeline extends Component {
     children: null,
 
     topHeaderLabelFormats: defaultTopHeaderLabelFormats,
+    middleHeaderLabelFormats: defaultMiddleHeaderLabelFormats,
     bottomHeaderLabelFormats: defaultBottomHeaderLabelFormats,
 
     selected: null
@@ -352,8 +373,8 @@ export default class ReactCalendarTimeline extends Component {
     } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-    const { topHeaderLabelHeight, bottomHeaderLabelHeight } = props
-    const headerHeight = topHeaderLabelHeight + bottomHeaderLabelHeight
+    const { topHeaderLabelHeight, middleHeaderLabelHeight, bottomHeaderLabelHeight } = props
+    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -915,6 +936,7 @@ export default class ReactCalendarTimeline extends Component {
     minUnit,
     timeSteps,
     topHeaderLabelHeight,
+    middleHeaderLabelHeight,
     bottomHeaderLabelHeight
   ) {
     const { sidebarWidth, rightSidebarWidth } = this.props
@@ -947,6 +969,7 @@ export default class ReactCalendarTimeline extends Component {
         minUnit={minUnit}
         timeSteps={timeSteps}
         topHeaderLabelHeight={topHeaderLabelHeight}
+        middleHeaderLabelHeight={middleHeaderLabelHeight}
         bottomHeaderLabelHeight={bottomHeaderLabelHeight}
         width={this.state.width}
         zoom={zoom}
@@ -956,6 +979,7 @@ export default class ReactCalendarTimeline extends Component {
         stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
         topHeaderLabelFormats={this.props.topHeaderLabelFormats}
+        middleHeaderLabelFormats={this.props.middleHeaderLabelFormats}
         bottomHeaderLabelFormats={this.props.bottomHeaderLabelFormats}
         registerScroll={this.registerScrollListener}
         leftSidebarHeader={leftSidebar}
@@ -1030,6 +1054,7 @@ export default class ReactCalendarTimeline extends Component {
       keys,
       lineHeight,
       topHeaderLabelHeight,
+      middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
       stackItems,
       itemHeightRatio
@@ -1045,7 +1070,7 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
-    const headerHeight = topHeaderLabelHeight + bottomHeaderLabelHeight
+    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const visibleItems = getVisibleItems(
       items,
@@ -1200,6 +1225,7 @@ export default class ReactCalendarTimeline extends Component {
       items,
       groups,
       topHeaderLabelHeight,
+      middleHeaderLabelHeight,
       bottomHeaderLabelHeight,
       sidebarWidth,
       rightSidebarWidth,
@@ -1223,7 +1249,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
     const minUnit = getMinUnit(zoom, width, timeSteps)
-    const headerHeight = topHeaderLabelHeight + bottomHeaderLabelHeight
+    const headerHeight = topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem
 
@@ -1265,6 +1291,7 @@ export default class ReactCalendarTimeline extends Component {
           minUnit,
           timeSteps,
           topHeaderLabelHeight,
+          middleHeaderLabelHeight,
           bottomHeaderLabelHeight
         )}
         <div style={outerComponentStyle} className="rct-outer">
