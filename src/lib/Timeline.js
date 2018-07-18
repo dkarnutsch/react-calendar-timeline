@@ -28,8 +28,9 @@ import { _get, _length } from './utility/generic'
 import {
   defaultKeys,
   defaultTimeSteps,
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
+  defaultTopHeaderLabelFormats,
+  defaultMiddleHeaderLabelFormats,
+  defaultBottomHeaderLabelFormats
 } from './default-config'
 
 export default class ReactCalendarTimeline extends Component {
@@ -45,8 +46,10 @@ export default class ReactCalendarTimeline extends Component {
     stickyOffset: PropTypes.number,
     stickyHeader: PropTypes.bool,
     lineHeight: PropTypes.number,
-    headerLabelGroupHeight: PropTypes.number,
-    headerLabelHeight: PropTypes.number,
+    topHeaderLabelHeight: PropTypes.number,
+    middleHeaderLabelHeight: PropTypes.number,
+    bottomHeaderLabelHeight: PropTypes.number,
+    useThreeRowHeader: PropTypes.bool,
     itemHeightRatio: PropTypes.number,
     minimumWidthForItemContentVisibility: PropTypes.number,
 
@@ -108,6 +111,7 @@ export default class ReactCalendarTimeline extends Component {
       minute: PropTypes.number,
       hour: PropTypes.number,
       day: PropTypes.number,
+      week: PropTypes.number,
       month: PropTypes.number,
       year: PropTypes.number
     }),
@@ -122,13 +126,15 @@ export default class ReactCalendarTimeline extends Component {
 
     selected: PropTypes.array,
 
-    headerLabelFormats: PropTypes.shape({
+    topHeaderLabelFormats: PropTypes.shape({
       yearShort: PropTypes.string,
       yearLong: PropTypes.string,
       monthShort: PropTypes.string,
       monthMedium: PropTypes.string,
       monthMediumLong: PropTypes.string,
       monthLong: PropTypes.string,
+      weekMedium: PropTypes.string,
+      weekLong: PropTypes.string,
       dayShort: PropTypes.string,
       dayLong: PropTypes.string,
       hourShort: PropTypes.string,
@@ -137,12 +143,26 @@ export default class ReactCalendarTimeline extends Component {
       hourLong: PropTypes.string
     }),
 
-    subHeaderLabelFormats: PropTypes.shape({
+    middleHeaderLabelFormats: PropTypes.shape({
+      yearShort: PropTypes.string,
+      yearLong: PropTypes.string,
+      monthShort: PropTypes.string,
+      monthLong: PropTypes.string,
+      weekMedium: PropTypes.string,
+      dayLong: PropTypes.string,
+      dayShort: PropTypes.string,
+      hourLong: PropTypes.string,
+      hourShort: PropTypes.string
+    }),
+
+    bottomHeaderLabelFormats: PropTypes.shape({
       yearShort: PropTypes.string,
       yearLong: PropTypes.string,
       monthShort: PropTypes.string,
       monthMedium: PropTypes.string,
       monthLong: PropTypes.string,
+      weekShort: PropTypes.string,
+      weekMedium: PropTypes.string,
       dayShort: PropTypes.string,
       dayMedium: PropTypes.string,
       dayMediumLong: PropTypes.string,
@@ -169,8 +189,10 @@ export default class ReactCalendarTimeline extends Component {
     stickyOffset: 0,
     stickyHeader: true,
     lineHeight: 30,
-    headerLabelGroupHeight: 30,
-    headerLabelHeight: 30,
+    topHeaderLabelHeight: 30,
+    middleHeaderLabelHeight: 30,
+    bottomHeaderLabelHeight: 30,
+    useThreeRowHeader: false,
     itemHeightRatio: 0.65,
     minimumWidthForItemContentVisibility: 25,
 
@@ -232,8 +254,9 @@ export default class ReactCalendarTimeline extends Component {
     onBoundsChange: null,
     children: null,
 
-    headerLabelFormats: defaultHeaderLabelFormats,
-    subHeaderLabelFormats: defaultSubHeaderLabelFormats,
+    topHeaderLabelFormats: defaultTopHeaderLabelFormats,
+    middleHeaderLabelFormats: defaultMiddleHeaderLabelFormats,
+    bottomHeaderLabelFormats: defaultBottomHeaderLabelFormats,
 
     selected: null
   }
@@ -352,8 +375,8 @@ export default class ReactCalendarTimeline extends Component {
     } = this.container.getBoundingClientRect()
 
     let width = containerWidth - props.sidebarWidth - props.rightSidebarWidth
-    const { headerLabelGroupHeight, headerLabelHeight } = props
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+    const { topHeaderLabelHeight, middleHeaderLabelHeight, bottomHeaderLabelHeight, useThreeRowHeader } = props
+    const headerHeight = useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const { dimensionItems, height, groupHeights, groupTops } = this.stackItems(
       props.items,
@@ -915,8 +938,9 @@ export default class ReactCalendarTimeline extends Component {
     canvasWidth,
     minUnit,
     timeSteps,
-    headerLabelGroupHeight,
-    headerLabelHeight
+    topHeaderLabelHeight,
+    middleHeaderLabelHeight,
+    bottomHeaderLabelHeight
   ) {
     const { sidebarWidth, rightSidebarWidth } = this.props
     const leftSidebar = sidebarWidth != null &&
@@ -947,8 +971,9 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
         minUnit={minUnit}
         timeSteps={timeSteps}
-        headerLabelGroupHeight={headerLabelGroupHeight}
-        headerLabelHeight={headerLabelHeight}
+        topHeaderLabelHeight={topHeaderLabelHeight}
+        middleHeaderLabelHeight={middleHeaderLabelHeight}
+        bottomHeaderLabelHeight={bottomHeaderLabelHeight}
         width={this.state.width}
         zoom={zoom}
         visibleTimeStart={this.state.visibleTimeStart}
@@ -956,8 +981,10 @@ export default class ReactCalendarTimeline extends Component {
         stickyOffset={this.props.stickyOffset}
         stickyHeader={this.props.stickyHeader}
         showPeriod={this.showPeriod}
-        headerLabelFormats={this.props.headerLabelFormats}
-        subHeaderLabelFormats={this.props.subHeaderLabelFormats}
+        topHeaderLabelFormats={this.props.topHeaderLabelFormats}
+        middleHeaderLabelFormats={this.props.middleHeaderLabelFormats}
+        bottomHeaderLabelFormats={this.props.bottomHeaderLabelFormats}
+        useThreeRowHeader={this.props.useThreeRowHeader}
         registerScroll={this.registerScrollListener}
         leftSidebarHeader={leftSidebar}
         rightSidebarHeader={rightSidebar}
@@ -1027,7 +1054,16 @@ export default class ReactCalendarTimeline extends Component {
       }
     }
 
-    const { keys, lineHeight, stackItems, itemHeightRatio } = this.props
+    const {
+      keys,
+      lineHeight,
+      topHeaderLabelHeight,
+      middleHeaderLabelHeight,
+      bottomHeaderLabelHeight,
+      useThreeRowHeader,
+      stackItems,
+      itemHeightRatio
+    } = this.props
     const {
       draggingItem,
       dragTime,
@@ -1039,6 +1075,7 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
+    const headerHeight = useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const visibleItems = getVisibleItems(
       items,
@@ -1089,7 +1126,8 @@ export default class ReactCalendarTimeline extends Component {
     const { height, groupHeights, groupTops } = stackingMethod(
       dimensionItems,
       groupOrders,
-      lineHeight
+      lineHeight,
+      headerHeight
     )
 
     return { dimensionItems, height, groupHeights, groupTops }
@@ -1191,8 +1229,10 @@ export default class ReactCalendarTimeline extends Component {
     const {
       items,
       groups,
-      headerLabelGroupHeight,
-      headerLabelHeight,
+      topHeaderLabelHeight,
+      middleHeaderLabelHeight,
+      bottomHeaderLabelHeight,
+      useThreeRowHeader,
       sidebarWidth,
       rightSidebarWidth,
       timeSteps,
@@ -1215,7 +1255,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
     const minUnit = getMinUnit(zoom, width, timeSteps)
-    const headerHeight = headerLabelGroupHeight + headerLabelHeight
+    const headerHeight =  useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const isInteractingWithItem = !!draggingItem || !!resizingItem
 
@@ -1256,8 +1296,9 @@ export default class ReactCalendarTimeline extends Component {
           canvasWidth,
           minUnit,
           timeSteps,
-          headerLabelGroupHeight,
-          headerLabelHeight
+          topHeaderLabelHeight,
+          middleHeaderLabelHeight,
+          bottomHeaderLabelHeight
         )}
         <div style={outerComponentStyle} className="rct-outer">
           {sidebarWidth > 0 ? this.sidebar(height, groupHeights) : null}

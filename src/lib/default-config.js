@@ -15,17 +15,20 @@ export const defaultTimeSteps = {
   minute: 1,
   hour: 1,
   day: 1,
+  week: 1,
   month: 1,
   year: 1
 }
 
-export const defaultHeaderLabelFormats = {
+export const defaultTopHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',
   monthShort: 'MM/YY',
   monthMedium: 'MM/YYYY',
   monthMediumLong: 'MMM YYYY',
   monthLong: 'MMMM YYYY',
+  weekMedium: '[CW] W',
+  weekLong: 'YYYY / [CW] W',
   dayShort: 'L',
   dayLong: 'dddd, LL',
   hourShort: 'HH',
@@ -35,12 +38,27 @@ export const defaultHeaderLabelFormats = {
   time: 'LLL'
 }
 
-export const defaultSubHeaderLabelFormats = {
+export const defaultMiddleHeaderLabelFormats = {
   yearShort: 'YY',
   yearLong: 'YYYY',
   monthShort: 'MM',
   monthMedium: 'MMM',
   monthLong: 'MMMM',
+  weekMedium: '[CW] W',
+  dayShort: 'D',
+  dayLong: 'dddd, Do',
+  hourLong: 'HH:00',
+  time: 'LLL'
+}
+
+export const defaultBottomHeaderLabelFormats = {
+  yearShort: 'YY',
+  yearLong: 'YYYY',
+  monthShort: 'MM',
+  monthMedium: 'MMM',
+  monthLong: 'MMMM',
+  weekMedium: '[CW] W',
+  weekShort: 'W',
   dayShort: 'D',
   dayMedium: 'dd D',
   dayMediumLong: 'ddd, Do',

@@ -7,6 +7,12 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 
 ## Unreleased
 
+### Added
+* Rename `headerLabelGroupHeight` and `headerLabelHeight` in order to support calender weeks and a row header layout
+
+### Breaking
+* Using `headerLabelGroupHeight` and `headerLabelHeight` does not work anymore. Use `topHeaderLabelHeight` and `bottomHeaderLabelHeight` instead.
+
 ### 0.17.3
 
 ### Added

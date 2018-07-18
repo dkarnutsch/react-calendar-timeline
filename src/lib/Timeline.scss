@@ -136,11 +136,12 @@ $weekend: rgba(250, 246, 225, 0.5);
     z-index: 90;
 
     .top-header,
+    .middle-header,
     .bottom-header {
       position: relative;
     }
 
-    .rct-label-group {
+    .rct-label-top {
       padding: 0 5px;
       position: absolute;
       top: 0;
@@ -164,9 +165,32 @@ $weekend: rgba(250, 246, 225, 0.5);
       }
     }
 
-    .rct-label {
+    .rct-label-middle {
+      padding: 0;
       position: absolute;
-      // overflow: hidden;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      border-left: $thick-border-width solid $border-color;
+      color: $header-color;
+      background: $header-background-color;
+      border-bottom: $border-width solid $border-color;
+      cursor: pointer;
+      &.rct-has-right-sidebar {
+        border-right: ($thick-border-width / 2) solid $border-color;
+        border-left: ($thick-border-width / 2) solid $border-color;
+      }
+
+      & > span {
+        position: sticky;
+        left: 5px;
+        right: 5px;
+      }
+    }
+
+    .rct-label-bottom {
+      position: absolute;
+      //overflow: hidden;
       text-align: center;
       cursor: pointer;
       border-left: $border-width solid $border-color;
@@ -183,6 +207,7 @@ $weekend: rgba(250, 246, 225, 0.5);
       &.rct-first-of-type {
         border-left: $thick-border-width solid $border-color;
       }
+
     }
   }
 

@@ -165,8 +165,10 @@ export default class App extends Component {
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
-        onTimeChange={this.handleTimeChange}
+        //onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
+        minZoom={1 * 60 * 60 * 1000}
+        maxZoom={15 * 365.24 * 86400 * 1000}
       />
     )
   }
