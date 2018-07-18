@@ -47,6 +47,12 @@ body {
   }
 }
 
+.row-root {
+  position: relative;
+  z-index: 999;
+  background-color: darkgray !important;
+}
+
 .holiday {
   background-color: rgba(250, 246, 225, 0.5);
 }

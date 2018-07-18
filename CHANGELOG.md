@@ -10,6 +10,8 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ### Added
 * Rename `headerLabelGroupHeight` and `headerLabelHeight` in order to support calender weeks and a row header layout
 * possibility to set classes for vertical lines depending on its time
+* possibility to add custom classes to the group-rows
+* possibility to add custom height to row (tree-group example)
 
 ### Breaking
 * Using `headerLabelGroupHeight` and `headerLabelHeight` does not work anymore. Use `topHeaderLabelHeight` and `bottomHeaderLabelHeight` instead.

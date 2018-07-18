@@ -71,6 +71,8 @@ export default class ReactCalendarTimeline extends Component {
 
     itemTouchSendsClick: PropTypes.bool,
 
+    horizontalLineClassNamesForGroup: PropTypes.func,
+
     onItemMove: PropTypes.func,
     onItemResize: PropTypes.func,
     onItemClick: PropTypes.func,
@@ -213,6 +215,8 @@ export default class ReactCalendarTimeline extends Component {
 
     traditionalZoom: false,
     showCursorLine: false,
+
+    horizontalLineClassNamesForGroup: null,
 
     onItemMove: null,
     onItemResize: null,
@@ -860,15 +864,17 @@ export default class ReactCalendarTimeline extends Component {
     this.props.onCanvasDoubleClick(groupId, time, e)
   }
 
-  horizontalLines(canvasWidth, groupHeights) {
+  horizontalLines(canvasWidth, groupHeights, groups) {
     return (
       <GroupRows
+        groups={groups}
         canvasWidth={canvasWidth}
         lineCount={_length(this.props.groups)}
         groupHeights={groupHeights}
         clickTolerance={this.props.clickTolerance}
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
+        horizontalLineClassNamesForGroup={this.props.horizontalLineClassNamesForGroup}
       />
     )
   }
@@ -1132,7 +1138,7 @@ export default class ReactCalendarTimeline extends Component {
       dimensionItems,
       groupOrders,
       lineHeight,
-      headerHeight
+      groups
     )
 
     return { dimensionItems, height, groupHeights, groupTops }
@@ -1345,7 +1351,7 @@ export default class ReactCalendarTimeline extends Component {
                 height,
                 headerHeight
               )}
-              {this.horizontalLines(canvasWidth, groupHeights)}
+              {this.horizontalLines(canvasWidth, groupHeights, groups)}
               {this.todayLine(
                 canvasTimeStart,
                 canvasTimeEnd,
