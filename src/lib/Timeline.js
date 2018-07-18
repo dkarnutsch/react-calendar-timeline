@@ -178,6 +178,8 @@ export default class ReactCalendarTimeline extends Component {
       removeListener: PropTypes.func
     }),
 
+    verticalLineClassNamesForTime: PropTypes.func,
+
     children: PropTypes.node
   }
 
@@ -224,6 +226,8 @@ export default class ReactCalendarTimeline extends Component {
     onCanvasMouseLeave: null,
     onCanvasMouseMove: null,
     onZoom: null,
+
+    verticalLineClassNamesForTime: null,
 
     moveResizeValidator: null,
 
@@ -824,6 +828,7 @@ export default class ReactCalendarTimeline extends Component {
         minUnit={minUnit}
         timeSteps={timeSteps}
         height={height}
+        verticalLineClassNamesForTime={this.props.verticalLineClassNamesForTime}
       />
     )
   }
