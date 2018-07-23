@@ -2,7 +2,12 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import Timeline from 'react-calendar-timeline'
+import Timeline, {
+  TimelineMarkers,
+  TodayMarker,
+  CustomMarker,
+  CursorMarker
+} from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
 
@@ -172,7 +177,6 @@ export default class App extends Component {
         itemTouchSendsClick={false}
         stackItems
         itemHeightRatio={0.75}
-        showCursorLine
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         onCanvasClick={this.handleCanvasClick}
@@ -184,12 +188,35 @@ export default class App extends Component {
         onItemMove={this.handleItemMove}
         onItemResize={this.handleItemResize}
         onItemDoubleClick={this.handleItemDoubleClick}
-        //onTimeChange={this.handleTimeChange}
+        onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
         minZoom={1 * 60 * 60 * 1000}
         maxZoom={15 * 365.24 * 86400 * 1000}
         verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
-      />
+      >
+        <TimelineMarkers>
+          <TodayMarker />
+          <CustomMarker
+            date={
+              moment()
+                .startOf('day')
+                .valueOf() +
+              1000 * 60 * 60 * 2
+            }
+          />
+          <CustomMarker
+            date={moment()
+              .add(3, 'day')
+              .valueOf()}
+          >
+            {({ styles }) => {
+              const newStyles = { ...styles, backgroundColor: 'blue' }
+              return <div style={newStyles} />
+            }}
+          </CustomMarker>
+          <CursorMarker />
+        </TimelineMarkers>
+      </Timeline>
     )
   }
 }

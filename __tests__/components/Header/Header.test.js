@@ -2,6 +2,11 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { sel } from 'test-utility'
 import Header from 'lib/layout/Header'
+import {
+  defaultTopHeaderLabelFormats,
+  defaultMiddleHeaderLabelFormats,
+  defaultBottomHeaderLabelFormats
+} from 'lib/default-config'
 
 const defaultProps = {
   hasRightSidebar: false,
@@ -12,9 +17,9 @@ const defaultProps = {
   minUnit: 'day',
   timeSteps: {},
   width: 400,
-  topHeaderLabelFormats: {},
-  middleHeaderLabelFormats: {},
-  bottomHeaderLabelFormats: {},
+  topHeaderLabelFormats: defaultTopHeaderLabelFormats,
+  middleHeaderLabelFormats: defaultMiddleHeaderLabelFormats,
+  bottomHeaderLabelFormats: defaultBottomHeaderLabelFormats,
   stickyOffset: 5,
   stickyHeader: true,
   topHeaderLabelHeight: 15,
@@ -45,7 +50,7 @@ describe('Header', () => {
 
       const mockCallParam = headerRefMock.mock.calls[0][0]
 
-      expect(mockCallParam.dataset.testId).toBe('timeline-elements-container')
+      expect(mockCallParam.dataset.testid).toBe('timeline-elements-container')
     })
 
     it('container recieves width property', () => {
@@ -122,6 +127,65 @@ describe('Header', () => {
       const wrapper = shallow(<Header {...props} />)
 
       expect(wrapper.props().style.top).toBe(0)
+    })
+    it('should update headers format when subHeaderLabelFormats and subHeaderLabelFormats change', () => {
+      const wrapper = mount(<Header {...defaultProps} />)
+      expect(
+        wrapper
+          .find('.rct-label-group')
+          .text()
+          .includes('January 1970')
+      ).toBeTruthy()
+      expect(
+        wrapper
+          .find('.rct-label')
+          .text()
+          .includes('Thursday, 1st')
+      ).toBeTruthy()
+      wrapper.setProps({
+        headerLabelFormats: {
+          yearShort: 'YY',
+          yearLong: 'YYYY',
+          monthShort: 'YY',
+          monthMedium: 'YYYY',
+          monthMediumLong: 'YYYY',
+          monthLong: 'YYYY',
+          dayShort: 'L',
+          dayLong: 'dddd',
+          hourShort: 'HH',
+          hourMedium: 'HH:00',
+          hourMediumLong: 'L, HH:00',
+          hourLong: 'dddd, LL, HH:00',
+          time: 'LLL'
+        },
+        subHeaderLabelFormats: {
+          yearShort: 'YY',
+          yearLong: 'YYYY',
+          monthShort: 'MM',
+          monthMedium: 'MMM',
+          monthLong: 'MMMM',
+          dayShort: 'D',
+          dayMedium: 'dd',
+          dayMediumLong: 'ddd',
+          dayLong: 'dddd',
+          hourShort: 'HH',
+          hourLong: 'HH:00',
+          minuteShort: 'mm',
+          minuteLong: 'HH:mm'
+        }
+      })
+      expect(
+        wrapper
+          .find('.rct-label-group')
+          .text()
+          .includes('1970')
+      ).toBeTruthy()
+      expect(
+        wrapper
+          .find('.rct-label')
+          .text()
+          .includes('Thursday')
+      ).toBeTruthy()
     })
   })
 })

@@ -16,6 +16,39 @@ and this project adheres (more or less) to [Semantic Versioning](http://semver.o
 ### Breaking
 * Using `headerLabelGroupHeight` and `headerLabelHeight` does not work anymore. Use `topHeaderLabelHeight` and `bottomHeaderLabelHeight` instead.
 
+### 0.18.0
+
+### Fixed
+
+* Timeline now respects changes to `headerLabelFormats` and `subHeaderLabelFormats` - #362
+
+### Added
+
+* timeline markers - user can have more control over markers that are rendered on the timeline. See `TimelineMarkers` section of README for documentation - #327
+
+### Breaking
+
+* Removed support for React 15 and lower.  This is due to the fact that 16+ supports returning arrays from render, something that the TimelineMarker feature relies on.
+* removed `showCursorLine` prop in favor of using the `CursorMarker` component. See `TimelineMarkers` section of README for documentation.
+
+```diff
+import Timeline,
++ {TimelineMarkers, CursorMarker}
+from 'react-calendar-timeline'
+
+<Timeline
+- showCursorLine
+
+- />
++ >
+
++ <TimelineMarkers>
++  <CursorMarker />
++ </TimelineMarkers>
+
++ </Timeline>
+```
+
 ### 0.17.3
 
 ### Added
