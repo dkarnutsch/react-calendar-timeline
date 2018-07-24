@@ -987,10 +987,6 @@ export default class ReactCalendarTimeline extends Component {
     const {
       keys,
       lineHeight,
-      topHeaderLabelHeight,
-      middleHeaderLabelHeight,
-      bottomHeaderLabelHeight,
-      useThreeRowHeader,
       stackItems,
       itemHeightRatio
     } = this.props
@@ -1005,7 +1001,6 @@ export default class ReactCalendarTimeline extends Component {
     const zoom = visibleTimeEnd - visibleTimeStart
     const canvasTimeEnd = canvasTimeStart + zoom * 3
     const canvasWidth = width * 3
-    const headerHeight = useThreeRowHeader ? topHeaderLabelHeight + middleHeaderLabelHeight + bottomHeaderLabelHeight : middleHeaderLabelHeight + bottomHeaderLabelHeight
 
     const visibleItems = getVisibleItems(
       items,
@@ -1279,7 +1274,7 @@ export default class ReactCalendarTimeline extends Component {
                     height,
                     headerHeight
                   )}
-                  {this.horizontalLines(canvasWidth, groupHeights)}
+                  {this.horizontalLines(canvasWidth, groupHeights, groups)}
                   {this.infoLabel()}
                   {this.childrenWithProps(
                     canvasTimeStart,

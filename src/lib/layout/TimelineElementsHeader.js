@@ -132,8 +132,9 @@ export default class TimelineElementsHeader extends Component {
       nextProps.canvasTimeEnd != this.props.canvasTimeEnd ||
       nextProps.width != this.props.width ||
       nextProps.canvasWidth != this.props.canvasWidth ||
-      nextProps.subHeaderLabelFormats != this.props.subHeaderLabelFormats ||
-      nextProps.headerLabelFormats != this.props.headerLabelFormats
+      nextProps.topHeaderLabelFormats != this.props.topHeaderLabelFormats ||
+      nextProps.middleHeaderLabelFormats != this.props.middleHeaderLabelFormats ||
+      nextProps.bottomHeaderLabelFormats != this.props.bottomHeaderLabelFormats
 
     return willUpate
   }

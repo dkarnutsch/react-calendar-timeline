@@ -25,6 +25,7 @@ const defaultProps = {
   topHeaderLabelHeight: 15,
   middleHeaderLabelHeight: 15,
   bottomHeaderLabelHeight: 15,
+  useThreeRowHeader: false,
   registerScroll: () => {},
   headerRef: () => {}
 }
@@ -132,42 +133,58 @@ describe('Header', () => {
       const wrapper = mount(<Header {...defaultProps} />)
       expect(
         wrapper
-          .find('.rct-label-group')
+          .find('.rct-label-middle')
           .text()
-          .includes('January 1970')
+          .includes('CW 52')
       ).toBeTruthy()
       expect(
         wrapper
-          .find('.rct-label')
+          .find('.rct-label-bottom')
           .text()
           .includes('Thursday, 1st')
       ).toBeTruthy()
       wrapper.setProps({
-        headerLabelFormats: {
+        defaultTopHeaderLabelFormats: {
           yearShort: 'YY',
           yearLong: 'YYYY',
-          monthShort: 'YY',
-          monthMedium: 'YYYY',
-          monthMediumLong: 'YYYY',
-          monthLong: 'YYYY',
+          monthShort: 'MM/YY',
+          monthMedium: 'MM/YYYY',
+          monthMediumLong: 'MMM YYYY',
+          monthLong: 'MMMM YYYY',
+          weekMedium: '[CW] W',
+          weekLong: 'YYYY / [CW] W',
           dayShort: 'L',
-          dayLong: 'dddd',
+          dayLong: 'dddd, LL',
           hourShort: 'HH',
           hourMedium: 'HH:00',
           hourMediumLong: 'L, HH:00',
           hourLong: 'dddd, LL, HH:00',
           time: 'LLL'
         },
-        subHeaderLabelFormats: {
+        defaultMiddleHeaderLabelFormats: {
           yearShort: 'YY',
           yearLong: 'YYYY',
           monthShort: 'MM',
           monthMedium: 'MMM',
           monthLong: 'MMMM',
+          weekMedium: '[CW] W',
           dayShort: 'D',
-          dayMedium: 'dd',
-          dayMediumLong: 'ddd',
-          dayLong: 'dddd',
+          dayLong: 'dddd, Do',
+          hourLong: 'HH:00',
+          time: 'LLL'
+        },
+        defaultBottomHeaderLabelFormats: {
+          yearShort: 'YY',
+          yearLong: 'YYYY',
+          monthShort: 'MM',
+          monthMedium: 'MMM',
+          monthLong: 'MMMM',
+          weekMedium: '[CW] W',
+          weekShort: 'W',
+          dayShort: 'D',
+          dayMedium: 'dd D',
+          dayMediumLong: 'ddd, Do',
+          dayLong: 'dddd, Do',
           hourShort: 'HH',
           hourLong: 'HH:00',
           minuteShort: 'mm',
@@ -176,13 +193,13 @@ describe('Header', () => {
       })
       expect(
         wrapper
-          .find('.rct-label-group')
+          .find('.rct-label-middle')
           .text()
-          .includes('1970')
+          .includes('CW 52')
       ).toBeTruthy()
       expect(
         wrapper
-          .find('.rct-label')
+          .find('.rct-label-bottom')
           .text()
           .includes('Thursday')
       ).toBeTruthy()

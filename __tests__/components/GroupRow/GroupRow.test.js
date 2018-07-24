@@ -8,7 +8,8 @@ const defaultProps = {
   onDoubleClick: noop,
   isEvenRow: false,
   clickTolerance: 10,
-  style: {}
+  style: {},
+  group: {}
 }
 
 // using mount to be able to interact with element, render
