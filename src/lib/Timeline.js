@@ -1284,7 +1284,7 @@ export default class ReactCalendarTimeline extends Component {
                       height,
                       headerHeight
                     )}
-                    {this.horizontalLines(canvasWidth, groupHeights)}
+                    {this.horizontalLines(canvasWidth, groupHeights, groups)}
                     {this.infoLabel()}
                     {this.childrenWithProps(
                       canvasTimeStart,
