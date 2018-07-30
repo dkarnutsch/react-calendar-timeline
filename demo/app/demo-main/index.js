@@ -190,8 +190,6 @@ export default class App extends Component {
         onItemDoubleClick={this.handleItemDoubleClick}
         onTimeChange={this.handleTimeChange}
         moveResizeValidator={this.moveResizeValidator}
-        minZoom={1 * 60 * 60 * 1000}
-        maxZoom={15 * 365.24 * 86400 * 1000}
         verticalLineClassNamesForTime={this.verticalLineClassNamesForTime}
       >
         <TimelineMarkers>

@@ -20,9 +20,9 @@ import {
   nostack,
   calculateDimensions,
   getGroupOrders,
-  getVisibleItems
+  getVisibleItems,
+  calculateTimeForXPosition
 } from './utility/calendar'
-import { getParentPosition } from './utility/dom-helpers'
 import { _get, _length } from './utility/generic'
 import {
   defaultKeys,
@@ -665,16 +665,25 @@ export default class ReactCalendarTimeline extends Component {
   // as well as generalizing how we get time from click on the canvas
   getTimeFromRowClickEvent = e => {
     const { dragSnap } = this.props
-    const { width, visibleTimeStart, visibleTimeEnd } = this.state
+    const {
+      width,
+      canvasTimeStart,
+      visibleTimeStart,
+      visibleTimeEnd
+    } = this.state
+    // this gives us distance from left of row element, so event is in
+    // context of the row element, not client or page
+    const { offsetX } = e.nativeEvent
 
-    // get coordinates relative to the component
-    const parentPosition = getParentPosition(e.currentTarget)
+    // FIXME: DRY up way to calculate canvasTimeEnd
+    const zoom = visibleTimeEnd - visibleTimeStart
+    const canvasTimeEnd = zoom * 3 + canvasTimeStart
 
-    const x = e.clientX - parentPosition.x
-
-    // calculate the x (time) coordinate taking the dragSnap into account
-    let time = Math.round(
-      visibleTimeStart + x / width * (visibleTimeEnd - visibleTimeStart)
+    let time = calculateTimeForXPosition(
+      canvasTimeStart,
+      canvasTimeEnd,
+      width * 3,
+      offsetX
     )
     time = Math.floor(time / dragSnap) * dragSnap
 
@@ -957,6 +966,7 @@ export default class ReactCalendarTimeline extends Component {
         <Sidebar
           groups={this.props.groups}
           keys={this.props.keys}
+          groupRenderer={this.props.groupRenderer}
           isRightSidebar
           width={this.props.rightSidebarWidth}
           groupHeights={groupHeights}
@@ -1254,42 +1264,43 @@ export default class ReactCalendarTimeline extends Component {
                   ref={el => (this.canvasComponent = el)}
                   style={canvasComponentStyle}
                 >
-                  <MarkerCanvas />
-                  {this.items(
-                    canvasTimeStart,
-                    zoom,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    minUnit,
-                    dimensionItems,
-                    groupHeights,
-                    groupTops
-                  )}
-                  {this.verticalLines(
-                    canvasTimeStart,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    minUnit,
-                    timeSteps,
-                    height,
-                    headerHeight
-                  )}
-                  {this.horizontalLines(canvasWidth, groupHeights, groups)}
-                  {this.infoLabel()}
-                  {this.childrenWithProps(
-                    canvasTimeStart,
-                    canvasTimeEnd,
-                    canvasWidth,
-                    dimensionItems,
-                    groupHeights,
-                    groupTops,
-                    height,
-                    headerHeight,
-                    visibleTimeStart,
-                    visibleTimeEnd,
-                    minUnit,
-                    timeSteps
-                  )}
+                  <MarkerCanvas>
+                    {this.items(
+                      canvasTimeStart,
+                      zoom,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      minUnit,
+                      dimensionItems,
+                      groupHeights,
+                      groupTops
+                    )}
+                    {this.verticalLines(
+                      canvasTimeStart,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      minUnit,
+                      timeSteps,
+                      height,
+                      headerHeight
+                    )}
+                    {this.horizontalLines(canvasWidth, groupHeights)}
+                    {this.infoLabel()}
+                    {this.childrenWithProps(
+                      canvasTimeStart,
+                      canvasTimeEnd,
+                      canvasWidth,
+                      dimensionItems,
+                      groupHeights,
+                      groupTops,
+                      height,
+                      headerHeight,
+                      visibleTimeStart,
+                      visibleTimeEnd,
+                      minUnit,
+                      timeSteps
+                    )}
+                  </MarkerCanvas>
                 </div>
               </ScrollElement>
               {rightSidebarWidth > 0

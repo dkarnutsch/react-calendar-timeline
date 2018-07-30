@@ -560,6 +560,7 @@ verticalLineClassNamesForTime = (timeStart, timeEnd) => {
 }
 ```
 
+
 # Timeline Markers
 
 Timeline markers are markers that are overlayed on the canvas at specific datepoints.
