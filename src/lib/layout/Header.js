@@ -35,18 +35,6 @@ class Header extends Component {
       stickyOffset,
       stickyHeader,
       headerRef,
-      hasRightSidebar,
-      showPeriod,
-      canvasTimeStart,
-      canvasTimeEnd,
-      canvasWidth,
-      minUnit,
-      timeSteps,
-      headerLabelFormats,
-      subHeaderLabelFormats,
-      headerLabelGroupHeight,
-      headerLabelHeight,
-      registerScroll
     } = this.props
 
     const headerStyle = {
@@ -66,19 +54,7 @@ class Header extends Component {
         <div style={{ width }} data-testid="timeline-elements-header-container">
           <TimelineElementsHeader
             data-testid="timeline-elements-header"
-            hasRightSidebar={hasRightSidebar}
-            showPeriod={showPeriod}
-            canvasTimeStart={canvasTimeStart}
-            canvasTimeEnd={canvasTimeEnd}
-            canvasWidth={canvasWidth}
-            minUnit={minUnit}
-            timeSteps={timeSteps}
-            width={width}
-            headerLabelFormats={headerLabelFormats}
-            subHeaderLabelFormats={subHeaderLabelFormats}
-            headerLabelGroupHeight={headerLabelGroupHeight}
-            headerLabelHeight={headerLabelHeight}
-            registerScroll={registerScroll}
+            {...this.props}
           />
         </div>
         {rightSidebarHeader}
