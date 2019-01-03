@@ -6,6 +6,8 @@ A modern and responsive react timeline component.
 
 Checkout the [examples here](https://github.com/namespace-ee/react-calendar-timeline/tree/master/examples)!
 
+# Fork by Adam Freemer
+
 # Getting started
 
 ```bash
